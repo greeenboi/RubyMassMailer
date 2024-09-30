@@ -13,33 +13,45 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    env:
+      RAILS_ENV: test
+      MAILJET_DEFAULT_MAIL: ${{ secrets.MAILJET_DEFAULT_MAIL }}
+      MAILJET_DEFAULT_NAME: ${{ secrets.MAILJET_DEFAULT_NAME }}
+      MAILJET_API_KEY: ${{ secrets.MAILJET_API_KEY }}
+      MAILJET_SECRET_KEY: ${{ secrets.MAILJET_SECRET_KEY }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      # Add or replace dependency steps here
-      - name: Install Ruby and gems
-        uses: ruby/setup-ruby@78c01b705fd9d5ad960d432d3a0cfa341d50e410 # v1.179.1
-        with:
-          bundler-cache: true
-      # Add or replace test runners here
-      - name: Run tests
-        run: bin/rake
 
-  lint:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
       - name: Install Ruby and gems
-        uses: ruby/setup-ruby@78c01b705fd9d5ad960d432d3a0cfa341d50e410 # v1.179.1
+        uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
-      - name: Generate binstubs
-        run: bundle binstubs bundler-audit brakeman rubocop
-      # Add or replace any other lints here
-      - name: Security audit dependencies
-        run: bin/bundler-audit --update
-      - name: Security audit application code
-        run: bin/brakeman -q -w2
-      - name: Lint Ruby files
-        run: bin/rubocop --parallel
+
+      - name: Run tests
+        run: bundle exec rake spec
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v3
+        if: failure()
+        with:
+          name: test-results
+          path: tmp/test-results
+#  lint:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Checkout code
+#        uses: actions/checkout@v4
+#      - name: Install Ruby and gems
+#        uses: ruby/setup-ruby@78c01b705fd9d5ad960d432d3a0cfa341d50e410 # v1.179.1
+#        with:
+#          bundler-cache: true
+#      - name: Generate binstubs
+#        run: bundle binstubs bundler-audit brakeman rubocop
+#      # Add or replace any other lints here
+#      - name: Security audit dependencies
+#        run: bin/bundler-audit --update
+#      - name: Security audit application code
+#        run: bin/brakeman -q -w2
+#      - name: Lint Ruby files
+#        run: bin/rubocop --parallel

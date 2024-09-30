@@ -5,9 +5,6 @@ ruby "3.2.4"
 gem 'dotenv-rails'
 
 gem 'mailjet'
-# group :development, :test do
-#   gem 'rspec-rails'
-# end
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 7.1.4"
@@ -47,3 +44,10 @@ group :development do
   # gem "spring"
 end
 
+group :test do
+  gem 'webmock'
+end
+
+group :development, :test do
+  gem 'rspec-rails'
+end
