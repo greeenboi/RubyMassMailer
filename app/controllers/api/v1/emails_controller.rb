@@ -15,7 +15,7 @@ class Api::V1::EmailsController < ApplicationController
     Mailjet::Send.create(messages: [{
       'From' => {
         'Email' => ENV['MAILJET_DEFAULT_MAIL'],
-        'Name' => 'Suvan GS'
+        'Name' => ENV['MAILJET_DEFAULT_NAME']
       },
       'To' => [
         {

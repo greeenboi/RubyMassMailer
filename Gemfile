@@ -2,12 +2,12 @@ source "https://rubygems.org"
 
 ruby "3.2.4"
 
-gem 'dotenv-rails', groups: [:development, :test]
+gem 'dotenv-rails'
 
-group :development, :test do
-  gem 'rspec-rails'
-  gem 'mailjet'
-end
+gem 'mailjet'
+# group :development, :test do
+#   gem 'rspec-rails'
+# end
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 7.1.4"
